@@ -11,7 +11,14 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 
 	const table = type === 'individual' ? 'borrowing_individual' : 'borrowing_class';
-	const borrowData =
+	// Satu tipe data bersama agar tidak membentuk union type yang sulit
+	// disimpulkan oleh tipe `insert` milik Supabase.
+	const borrowData: {
+		book_id: number;
+		quantity: number;
+		student_name?: string;
+		class_leader?: string;
+	} =
 		type === 'individual'
 			? { book_id, quantity, student_name }
 			: { book_id, quantity, class_leader };
